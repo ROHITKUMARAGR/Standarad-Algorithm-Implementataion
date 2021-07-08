@@ -25,7 +25,7 @@ struct cars{
 //bool comp(const struct cars &c1,const struct cars &c2){
   //     return c1.price>c2.price;
 //}
-//Comparator function to compare the objects o tha basis of mileage and if the mileage is same then compare with the price 
+//Comparator function to compare the objects on tha basis of mileage and if the mileage is same then compare with the price 
 /*bool comp(const struct cars &c1,const struct cars &c2){
     if(c1.mileage==c2.mileage){
              return c1.price<c2.price;
