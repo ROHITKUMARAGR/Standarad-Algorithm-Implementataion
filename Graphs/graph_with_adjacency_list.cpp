@@ -9,7 +9,7 @@
 using namespace std;
 void printing(vector<list<int>>arru){
    for(int a=0;a<arru.size();a++){
-       cout<<a+1<<"->";
+       cout<<a<<"->";
        auto it=arru[a].begin();
        while(it!=arru[a].end()){
            auto it2=it;
@@ -24,6 +24,19 @@ void printing(vector<list<int>>arru){
    }
 }
 
+
+
+void DFS(int i,vector<bool>&arr,vector<list<int>>&arrui){
+     
+      cout<<i<<endl;
+      for(auto it=arrui[i].begin();it!=arrui[i].end();it++){
+          if(!arr[*it]){
+                  arr[*it]=true;
+                  DFS(*it,arr,arrui);
+          }
+      }
+} 
+
 int main(){
 cout<<"Enter the no. of vertices u want to keep in the graph"<<endl;
 int i;
@@ -31,7 +44,7 @@ cin>>i;
 vector<list<int>>arru(i); //Adjacenecy List
 for(int a=0;a<i;a++){
     int j;
-    cout<<"Number of vertices connected with "<<a+1<<" vertex"<<endl;
+    cout<<"Number of vertices connected with "<<a<<" vertex"<<endl;
     cin>>j;
     while(j--){
         int d;
@@ -42,6 +55,13 @@ for(int a=0;a<i;a++){
 }
 
 printing(arru);
+
+vector<bool>isVisited(i,false);
+cout<<"Enter the vertices value from where u want to start the DFS traversal"<<endl;
+int g;
+cin>>g;
+isVisited[g]=true;
+DFS(g,isVisited,arru);
 
 
 return 0;
