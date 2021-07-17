@@ -26,10 +26,10 @@ void insert_a_vertices(string a,unordered_map<string,node>&r1){
 //Adding an edge for an undirected graph
 void addedge_undirected_graph(string a,string b,int cost,unordered_map<string,node>&r2){
         if(r2.count(a)){
-          r2[a].arr.insert({a,cost});
+          r2[a].arr.insert({b,cost});
         }
         if(r2.count(b)){
-          r2[b].arr.insert({b,cost});
+          r2[b].arr.insert({a,cost});
         }
         return;
 }
@@ -47,13 +47,115 @@ void removevertex(string name,unordered_map<string,node>&r3){
    }
 
 }
+//Deleting an edge from the graph
+void removeEdge(string name1,string name2,unordered_map<string,node>&r3){
+       bool ab=r3.count(name1);
+       bool bc=r3.count(name2);
+       if(ab==false||bc==false||!r3[name1].arr.count(name2)){
+          return;
+       }
+       r3[name1].arr.erase(name2);
+       r3[name2].arr.erase(name1);
+
+}
+
+
+
+void display(unordered_map<string,node>&ar){
+   auto it=ar.begin();
+   while(it!=ar.end()){
+     cout<<it->first<<" => ";
+     cout<<endl;
+     auto it2=ar[it->first].arr.begin();
+     while(it2!=ar[it->first].arr.end()){
+       cout<<it2->first<<" "<<it2->second;
+       cout<<endl;
+       it2++; 
+     }
+     cout<<endl;
+     it++;
+   }
+}
+//recursive implementation of DFS Traversal
+void DFS_recursive(string a,unordered_map<string,node>&r5,unordered_map<string,bool>&r6){
+              cout<<a<<endl;
+              r6[a]=true;
+              for(auto it=r5[a].arr.begin();it!=r5[a].arr.end();it++){
+                      if(!r6[it->first]){
+                        DFS_recursive(it->first,r5,r6);
+                      }
+              }
+              return;
+}
+
+
+//DFS traversal using the stack
+void DFS(string a,int size,unordered_map<string,node>&r4){
+    unordered_map<string,bool>arrui;
+    for(auto it2=r4.begin();it2!=r4.end();it2++){
+         arrui.insert({it2->first,false});
+    }
+    stack<string>arru;
+    arru.push(a);
+    arrui[a]=true;
+    while(!arru.empty()){
+       a=arru.top();
+      cout<<a<<endl;
+      arru.pop();
+      for(auto it=r4[a].arr.begin();it!=r4[a].arr.end();it++){
+          if(!arrui[it->first]){
+              arru.push(it->first);
+              arrui[it->first]=true;
+          }
+      }
+    }
+}
+
+void BFS(string a,int size,unordered_map<string,node>&r4){
+    unordered_map<string,bool>arrui;
+    for(auto it2=r4.begin();it2!=r4.end();it2++){
+         arrui.insert({it2->first,false});
+    }
+    queue<string>arru;
+    arru.push(a);
+    arrui[a]=true;
+    while(!arru.empty()){
+       a=arru.front();
+      cout<<a<<endl;
+      arru.pop();
+      for(auto it=r4[a].arr.begin();it!=r4[a].arr.end();it++){
+          if(!arrui[it->first]){
+              arru.push(it->first);
+              arrui[it->first]=true;
+          }
+      }
+    }
+}
+
 
 
 int main(){
 unordered_map<string,node>arru;
 insert_a_vertices("a",arru);
 insert_a_vertices("b",arru);
-
-
+insert_a_vertices("c",arru);
+insert_a_vertices("d",arru);
+insert_a_vertices("e",arru);
+addedge_undirected_graph("a","b",5,arru);
+addedge_undirected_graph("a","c",6,arru);
+addedge_undirected_graph("c","d",7,arru);
+addedge_undirected_graph("b","e",8,arru);
+addedge_undirected_graph("b","d",9,arru);
+addedge_undirected_graph("e","d",4,arru);
+display(arru);
+DFS("e",5,arru);
+unordered_map<string,bool>arrui;
+    for(auto it2=arru.begin();it2!=arru.end();it2++){
+         arrui.insert({it2->first,false});
+    }
+ cout<<endl;
+ DFS_recursive("e",arru,arrui);
+ cout<<endl;
+ BFS("e",5,arru);   
 return 0;
 }
