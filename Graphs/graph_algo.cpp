@@ -89,6 +89,7 @@ void DFS_recursive(string a,unordered_map<string,node>&r5,unordered_map<string,b
 }
 
 
+
 //DFS traversal using the stack
 void DFS(string a,int size,unordered_map<string,node>&r4){
     unordered_map<string,bool>arrui;
@@ -132,6 +133,83 @@ void BFS(string a,int size,unordered_map<string,node>&r4){
     }
 }
 
+bool isConnected(unordered_map<string,node>&r4,string a,unordered_map<string,bool>arrui){
+    queue<string>arru;
+    arru.push(a);
+    arrui[a]=true;
+    while(!arru.empty()){
+       a=arru.front();
+      cout<<a<<endl;
+      arru.pop();
+      for(auto it=r4[a].arr.begin();it!=r4[a].arr.end();it++){
+          if(!arrui[it->first]){
+              arru.push(it->first);
+              arrui[it->first]=true;
+          }
+      }
+    }
+    for(auto it=arrui.begin();it!=arrui.end();it++){
+         if(it->second==false){
+           return false;
+         }
+    }
+    return true;
+
+
+
+}
+
+
+void print_no_of_CC(unordered_map<string,node>&r4,string a,unordered_map<string,bool>&arrui){
+  queue<string>arru;
+    arru.push(a);
+    arrui[a]=true;
+    while(!arru.empty()){
+       a=arru.front();
+      cout<<a<<" ";
+      arru.pop();
+      for(auto it=r4[a].arr.begin();it!=r4[a].arr.end();it++){
+          if(!arrui[it->first]){
+              arru.push(it->first);
+              arrui[it->first]=true;
+          }
+      }
+    }
+    cout<<endl;
+
+    for(auto it=arrui.begin();it!=arrui.end();it++){
+         if(it->second==false){
+           print_no_of_CC(r4,it->first,arrui);
+         }
+    }
+  return;
+}
+
+
+bool IsCycle(unordered_map<string,node>&r4,string a){
+   unordered_map<string,bool>arrui;
+    for(auto it2=r4.begin();it2!=r4.end();it2++){
+         arrui.insert({it2->first,false});
+    }
+    queue<string>arru;
+    arru.push(a);
+    arrui[a]=true;
+    while(!arru.empty()){
+       a=arru.front();
+      cout<<a<<endl;
+      arru.pop();
+      for(auto it=r4[a].arr.begin();it!=r4[a].arr.end();it++){
+          if(!arrui[it->first]){
+              arru.push(it->first);
+              arrui[it->first]=true;
+          }else{
+            return true;
+          }
+      }
+    }
+  
+}
+
 
 
 int main(){
@@ -141,21 +219,38 @@ insert_a_vertices("b",arru);
 insert_a_vertices("c",arru);
 insert_a_vertices("d",arru);
 insert_a_vertices("e",arru);
+insert_a_vertices("f",arru);
 addedge_undirected_graph("a","b",5,arru);
 addedge_undirected_graph("a","c",6,arru);
 addedge_undirected_graph("c","d",7,arru);
-addedge_undirected_graph("b","e",8,arru);
 addedge_undirected_graph("b","d",9,arru);
-addedge_undirected_graph("e","d",4,arru);
+addedge_undirected_graph("e","f",9,arru);
 display(arru);
+cout<<"DFS=>"<<endl;
 DFS("e",5,arru);
 unordered_map<string,bool>arrui;
     for(auto it2=arru.begin();it2!=arru.end();it2++){
          arrui.insert({it2->first,false});
     }
- cout<<endl;
+ cout<<"DFS recursive=>"<<endl;
  DFS_recursive("e",arru,arrui);
- cout<<endl;
- BFS("e",5,arru);   
+ cout<<"BFS=>"<<endl;
+ BFS("e",5,arru);  
+ for(auto it2=arrui.begin();it2!=arrui.end();it2++){
+        it2->second=false;
+    } 
+if(isConnected(arru,"a",arrui)){
+   cout<<"Its all connected"<<endl;
+}else{
+  cout<<"Its somewere disconnectd"<<endl;
+}
+for(auto it2=arrui.begin();it2!=arrui.end();it2++){
+        it2->second=false;
+    }
+cout<<"No. of Connected Components"<<endl;
+print_no_of_CC(arru,"a",arrui);
+
+
+
 return 0;
 }
